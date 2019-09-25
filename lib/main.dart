@@ -1,7 +1,8 @@
+import 'package:first_app/result.dart';
 import 'package:flutter/material.dart';
 
-import './question.dart';
-import './answer.dart';
+import './quiz.dart';
+import './result.dart';
 
 void main() => runApp(MyApp());
 
@@ -14,6 +15,21 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  final _questions = const [
+    {
+      'questionText': 'What\'s your favourite Color?',
+      'answers': ['Black', 'Red', 'Green', 'White'],
+    },
+    {
+      'questionText': 'What\'s your Favourite Animal?',
+      'answers': ['Lion', 'Tiger', 'Elephant', 'Horse'],
+    },
+    {
+      'questionText': 'What\'s your Favourite Place?',
+      'answers': ['Delhi', 'Mumbai', 'Bangalore', 'Kolkata'],
+    },
+  ];
+
   var _questionIndex = 0;
 
   void _answerQues() {
@@ -23,41 +39,26 @@ class _MyAppState extends State<MyApp> {
 
     print(_questionIndex);
     // print('Answer Chossen!!');
+
+    if (_questionIndex < _questions.length) {
+      print('We have more questions');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    var questions = [
-      {
-        'questionText': 'What\'s your favourite Color?',
-        'answers': ['Black', 'Red', 'Green', 'White'],
-      },
-      {
-        'questionText': 'What\'s your Favourite Animal?',
-        'answers': ['Lion', 'Tiger', 'Elephant', 'Horse'],
-      },
-      {
-        'questionText': 'What\'s your Favourite Place?',
-        'answers': ['Delhi', 'Mumbai', 'Bangalore', 'Kolkata'],
-      },
-    ];
-
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: Text('My First App'),
         ),
-        body: Column(
-          children: [
-            Question(
-              questions[_questionIndex]['questionText'],
-            ),
-            ...(questions[_questionIndex]['answers'] as List<String>)
-                .map((answer) {
-              return Answer(_answerQues, answer);
-            }).toList()
-          ],
-        ),
+        body: _questionIndex < _questions.length
+            ? Quiz(
+                answerQues: _answerQues,
+                questionIndex: _questionIndex,
+                questions: _questions,
+              )
+            : Result(),
       ),
     );
   }
